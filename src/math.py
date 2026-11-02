@@ -1,4 +1,7 @@
 
+from random import sample
+
+
 class DslrExeption(Exception):
 	def __init__(self, message)
 		super(Exception, message)
@@ -40,10 +43,16 @@ def dslr_count(l: list[float], value: float) -> int:
 			count += 1
 	return count
 
-def dslr_quartile(l: list, percent: float):
+def dslr_quartile(l: list, percent: float)-> float:
 	l = list(l)
 	l.sort();
 	return l[round(len(l) * percent)]
 
+def dslr_stddev(l:list[float]) -> float:
+	mean = dslr_mean(l)
+	s = sum([(x - mean) ** 2 for x in l])
+	e = (1 / (len(l) - 1)) * s
+	return e ** 0.5
+
 if __name__ == "__main__":
-	pass
+	pass 
