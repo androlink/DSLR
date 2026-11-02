@@ -43,7 +43,7 @@ class Reader():
     try:
       return float(value)
     except:
-      return float('nan')
+      return None
   
   def listOfProperty(self, property: str) -> list: 
     return [student[property] for student in self.students]
@@ -52,12 +52,30 @@ if __name__ == '__main__':
   if len(sys.argv) != 2 or not sys.argv[1].endswith(".csv") :
     print("Program only takes one .csv file")
     exit()
+    
+  def test(title: str, callback):
+    try: 
+      print(f"\n{title}")
+      callback()
+      print("ok")
+    except Exception as e:
+      print(e)
+      exit(1)
   
-  try:
+  def checkParsedFloatIsNone():
+    value = Reader(sys.argv[1]).tryConvertToFloat('')
+    if value != None:
+      raise Exception(f"non parsable float should be None not : '{value}'")
+      
+  def checkListOfProperty():
     reader = Reader(sys.argv[1])
-    print(reader.listOfProperty('dob'))
-    
-    
-  except Exception as e:
-    print(e)
+    reader.students = [Student(0,'','','','','', 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), Student(0,'','','','','', 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)]
+    l = reader.listOfProperty('arithmancy')
+    expect = [42, 21]
+    if l != expect:
+      raise Exception(f"Got {l} when expecting {expect}")
+        
+  test("Test reading/parsing provided file", lambda: Reader(sys.argv[1]))
+  test("Parsing float should return none if unparsable", lambda: checkParsedFloatIsNone() )
+  test("Parsing float should return none if unparsable", lambda: checkListOfProperty() )
   
