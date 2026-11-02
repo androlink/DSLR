@@ -120,7 +120,3 @@ class Student():
     if key == 'flying':
       return self.flying
     raise Exception(f"Unknown key '{key}' in Student object")
-    
-if __name__ == '__main__':
-  student = Student(0,'Ravenclaw','Tamara','Hsu', datetime.datetime.strptime("2000-03-30", "%Y-%m-%d").date(),'Left',58384.0,-487.88608595139016,5.727180298550763,4.8788608595139005,4.7219999999999995,272.0358314131986,532.4842261151226,5.231058287281048,1039.7882807428462,3.7903690663529614,0.7159391270136213,-232.79405,-26.89)
-  print(student)
