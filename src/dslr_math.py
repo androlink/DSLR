@@ -57,6 +57,13 @@ def dslr_stddev(l:list[float]) -> float:
 	s = sum([(x - mean) ** 2 for x in l])
 	e = (1 / (len(l) - 1)) * s
 	return e ** 0.5
+	
+def dslr_count_none(l: list[float]) -> int:
+  count = 0
+  for value in l:
+    if value == None:
+      count += 1
+  return count
 
 if __name__ == "__main__":
 	assert 2 == dslr_mean([0, 1, 2, 3, 4]), "mean"
