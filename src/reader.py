@@ -1,6 +1,6 @@
 import datetime
 
-from student import Student
+from src.student import Student
 import sys
 
 class Reader():
