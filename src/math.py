@@ -1,9 +1,8 @@
 
-from random import sample
 
 
 class DslrExeption(Exception):
-	def __init__(self, message)
+	def __init__(self, message):
 		super(Exception, message)
 
 def dslr_min_2(v1: float, v2: float):
@@ -55,4 +54,11 @@ def dslr_stddev(l:list[float]) -> float:
 	return e ** 0.5
 
 if __name__ == "__main__":
-	pass 
+	assert 2 == dslr_mean([0, 1, 2, 3, 4]), "mean"
+	assert 1 == dslr_count([0, 1, 2, 3, 4], 2), "count"
+	assert -1 == dslr_min([-1, 0, 1, 2, 3, 4]), "min"
+	assert 4 == dslr_max([-1, 0, 1, 2, 3, 4]), "max"
+	assert 25 == dslr_quartile(list(range(0, 100)), 0.25), "quartile 25"
+	assert 50 == dslr_quartile(list(range(0, 100)), 0.50), "quartile 50"
+	assert 75 == dslr_quartile(list(range(0, 100)), 0.75), "quartile 75"
+	assert  0.00001 > abs(5.2372293656638 - dslr_stddev([10, 12, 23, 23, 16, 23, 21, 16])), "stddev"
