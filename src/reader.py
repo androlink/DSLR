@@ -1,10 +1,10 @@
 import datetime
 
-from student import Student
+from src.student import Student
 import sys
 
 class Reader():
-  students: list
+  students: list[Student]
   def __init__(self, filePath):
     self.students = []
     with (open(filePath) as file):
@@ -13,7 +13,7 @@ class Reader():
           continue
         student = self.__studentFromLine__(line)
         self.students.append(student)
-        
+
   def __studentFromLine__(self, line: str):
     properties = line.split(',')
     student = Student(
@@ -38,44 +38,43 @@ class Reader():
       self.tryConvertToFloat(properties[18]),
     )
     return student
-    
-  def tryConvertToFloat(self, value: str) -> float:
+
+  def tryConvertToFloat(self, value: str) -> float | None:
     try:
       return float(value)
     except:
       return None
-  
-  def listOfProperty(self, property: str) -> list: 
+
+  def listOfProperty(self, property: str) -> list:
     return [student[property] for student in self.students]
 
 if __name__ == '__main__':
   if len(sys.argv) != 2 or not sys.argv[1].endswith(".csv") :
     print("Program only takes one .csv file")
     exit()
-    
+
   def test(title: str, callback):
-    try: 
+    try:
       print(f"\n{title}")
       callback()
       print("ok")
     except Exception as e:
       print(e)
       exit(1)
-  
+
   def checkParsedFloatIsNone():
     value = Reader(sys.argv[1]).tryConvertToFloat('')
     if value != None:
       raise Exception(f"non parsable float should be None not : '{value}'")
-      
+
   def checkListOfProperty():
     reader = Reader(sys.argv[1])
-    reader.students = [Student(0,'','','','','', 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), Student(0,'','','','','', 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)]
+    reader.students = [Student(0,'','','',datetime.date(0,0,0),'', 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), Student(0,'','','',datetime.date(0,0,0),'', 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)]
     l = reader.listOfProperty('arithmancy')
     expect = [42, 21]
     if l != expect:
       raise Exception(f"Got {l} when expecting {expect}")
-        
+
   test("Test reading/parsing provided file", lambda: Reader(sys.argv[1]))
   test("Parsing float should return none if unparsable", lambda: checkParsedFloatIsNone() )
   test("Parsing float should return none if unparsable", lambda: checkListOfProperty() )
-  
