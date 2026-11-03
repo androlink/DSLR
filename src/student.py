@@ -7,20 +7,20 @@ class Student():
   lastName: str
   dob: datetime.date
   hand: str
-  arithmancy: float
-  astronomy: float
-  herbology: float
-  defense: float
-  divination: float
-  muggleStudies: float
-  ancientRunes: float
-  historyOfMagic: float
-  transfiguration: float
-  potions: float
-  careOfMagicalCreatures: float
-  charms: float
-  flying: float
-  
+  arithmancy: float | None
+  astronomy: float | None
+  herbology: float | None
+  defense: float | None
+  divination: float | None
+  muggleStudies: float | None
+  ancientRunes: float | None
+  historyOfMagic: float | None
+  transfiguration: float | None
+  potions: float | None
+  careOfMagicalCreatures: float | None
+  charms: float | None
+  flying: float | None
+
   def __init__(self,
   index: int,
   house: str,
@@ -28,19 +28,19 @@ class Student():
   lastName: str,
   dob: datetime.date,
   hand: str,
-  arithmancy: float,
-  astronomy: float,
-  herbology: float,
-  defense: float,
-  divination: float,
-  muggleStudies: float,
-  ancientRunes: float,
-  historyOfMagic: float,
-  transfiguration: float,
-  potions: float,
-  careOfMagicalCreatures: float,
-  charms: float,
-  flying: float,
+  arithmancy: float|None,
+  astronomy: float|None,
+  herbology: float|None,
+  defense: float|None,
+  divination: float|None,
+  muggleStudies: float|None,
+  ancientRunes: float|None,
+  historyOfMagic: float|None,
+  transfiguration: float|None,
+  potions: float|None,
+  careOfMagicalCreatures: float|None,
+  charms: float|None,
+  flying: float|None,
   ):
     self.index = index
     self.house = house
@@ -62,7 +62,7 @@ class Student():
     self.charms = charms
     self.flying = flying
     pass
-  
+
   def __str__(self):
     return f'''{self.firstName} {self.lastName}, {self.dob} : {self.house}
       - {self.hand}
@@ -79,7 +79,7 @@ class Student():
       - {self.careOfMagicalCreatures}
       - {self.charms}
       - {self.flying}'''
-    
+
   def __getitem__(self, key):
     if key == 'index':
       return self.index
