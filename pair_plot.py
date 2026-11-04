@@ -3,45 +3,7 @@ import pandas
 from src.reader import Reader
 from src.features_enum import Features
 from src.visualizer_cli import VisualizerCli
-
-class ScaterPlot():
-  reader: Reader
-  feature: Features
-  
-  gryffindorX: list[int]
-  gryffindorY: list[float]
-  hufflepuffX: list[int]
-  hufflepuffY: list[float]
-  ravenclawX: list[int]
-  ravenclawY: list[float]
-  slytherinX: list[int]
-  slytherinY: list[float]
-    
-  
-  def __init__(self, reader: Reader, feature: Features):
-    self.reader = reader
-    self.feature = Features
-    
-    self.gryffindorY = []
-    self.slytherinY = []
-    self.ravenclawY = []
-    self.hufflepuffY = []
-    
-    for student in reader.students:
-      match student.house:
-        case 'Gryffindor':
-          self.gryffindorY.append(student[feature])
-        case 'Slytherin':
-          self.slytherinY.append(student[feature])
-        case 'Ravenclaw':
-          self.ravenclawY.append(student[feature])
-        case 'Hufflepuff':
-          self.hufflepuffY.append(student[feature])
-    self.gryffindorX = [i for i in range(len(self.gryffindorY))]
-    self.slytherinX = [i for i in range(len(self.slytherinY))]
-    self.ravenclawX = [i for i in range(len(self.ravenclawY))]
-    self.hufflepuffX = [i for i in range(len(self.hufflepuffY))]
-    pass
+import seaborn
 
 if __name__ == '__main__':
   cli = VisualizerCli()
@@ -49,35 +11,57 @@ if __name__ == '__main__':
   if not cli.filePath.endswith(".csv") :
     print("scatter_plot.py only takes one .csv file as argument")
     exit()
-
-  reader = Reader(cli.filePath)
   
-  data: pandas.DataFrame = pandas.DataFrame({f: reader.listOfProperty(f) for f in Features})
-  num_features = len(Features)
+  data: pandas.DataFrame = pandas.read_csv(cli.filePath)
+  data = data.drop(columns=['Index', 'Last Name' ,'First Name', 'Best Hand', 'Birthday'])
+  numFeatures = len(Features)
   
-  fig: plt.Figure
-  axes: plt.Axes
-  fig, axes = plt.subplots(num_features, num_features, figsize=(10, 10))
+  fig = plt.figure(1)
+  fig.set_layout_engine('compressed')
+  columns = rows = numFeatures
+  
   markerSize = 4.2
-  
-  fig.set_layout_engine('constrained')
-  for i in range(num_features):
-    for j in range(num_features):
-      ax: plt.Axes = axes[i, j]
+  featuresName = [f for f in Features]
+  fontSize = 7.5
+  custom_palette = {
+    "Gryffindor": "gold",
+    "Slytherin": "green",
+    "Ravenclaw": "red",
+    "Hufflepuff": "blue",
+}
+  i = 0
+  for fi in Features:
+    if fi == Features.hogwartsHouse: 
+      i += 1
+      continue
+    j = 0
+    for fj in Features:
+      if fj == Features.hogwartsHouse: 
+        j += 1
+        continue
+      fig.add_subplot(rows, columns, ((numFeatures * i) + j) + 1)
+      ax: plt.Axes
+
       if i == j:
-          ax.hist(data.iloc[:, i], bins=15, color='skyblue', edgecolor='black')
+          ax = seaborn.histplot(data, x = fi, bins=15, hue="Hogwarts House", palette=custom_palette, edgecolor='black')
       else:
-          ax.scatter(data.iloc[:, j], data.iloc[:, i], alpha=0.7, s=10, color="blue")
+          ax = seaborn.scatterplot(data, x = fj, y = fi , hue="Hogwarts House", palette=custom_palette, legend='brief', size=markerSize)
 
+      ax.legend_ = None
+      ax.set_xlabel('')
+      ax.set_ylabel('')
       if j == 0:
-          ax.set_ylabel(data.columns[i], fontsize=10)
-      if i == num_features - 1:
-          ax.set_xlabel(data.columns[j], fontsize=10)
+          ax.set_ylabel(fi, size=fontSize)
+      # `-2` and not `-1` due to hogwartsHouse being ignored
+      if i == numFeatures - 2:
+          ax.set_xlabel(fj, size=fontSize)
 
-      # Remove ticks for a cleaner look
       ax.set_xticks([])
       ax.set_yticks([])
-
+      j += 1
+    i += 1
+  fig.legend(labels=["Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff"], loc='lower right')
+  fig.set_size_inches(20, 20)
   plt.show()
     
   
