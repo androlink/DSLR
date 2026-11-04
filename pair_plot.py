@@ -23,12 +23,13 @@ if __name__ == '__main__':
   markerSize = 4.2
   featuresName = [f for f in Features]
   fontSize = 7.5
+  # For some reason the color order is shifted :(
   custom_palette = {
-    "Gryffindor": "gold",
-    "Slytherin": "green",
-    "Ravenclaw": "red",
-    "Hufflepuff": "blue",
-}
+    "Gryffindor": "green",
+    "Slytherin": "red",
+    "Ravenclaw": "blue",
+    "Hufflepuff": "orange",
+  }
   i = 0
   for fi in Features:
     if fi == Features.hogwartsHouse: 
@@ -43,11 +44,24 @@ if __name__ == '__main__':
       ax: plt.Axes
 
       if i == j:
-          ax = seaborn.histplot(data, x = fi, bins=15, hue="Hogwarts House", palette=custom_palette, edgecolor='black')
+          ax = seaborn.histplot(data,
+            x = fi,
+            bins=15,
+            hue="Hogwarts House",
+            palette=custom_palette,
+            legend=False,
+            edgecolor='black'
+          )
       else:
-          ax = seaborn.scatterplot(data, x = fj, y = fi , hue="Hogwarts House", palette=custom_palette, legend='brief', size=markerSize)
-
-      ax.legend_ = None
+          ax = seaborn.scatterplot(data,
+            x = fj,
+            y = fi ,
+            hue="Hogwarts House",
+            palette=custom_palette,
+            legend=False,
+            size=markerSize
+          )
+      
       ax.set_xlabel('')
       ax.set_ylabel('')
       if j == 0:
@@ -60,8 +74,8 @@ if __name__ == '__main__':
       ax.set_yticks([])
       j += 1
     i += 1
-  fig.legend(labels=["Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff"], loc='lower right')
   fig.set_size_inches(20, 20)
+  plt.figlegend(custom_palette, loc='lower right')
   plt.show()
     
   
