@@ -1,18 +1,11 @@
 from matplotlib.axes import Axes
-import stat
 import seaborn
 import pandas
-from math import ceil
-from src.math import dslr_mean
-from random import Random
-import random
 
 import sys
 
 import matplotlib.pyplot as plt
 
-from src.reader import Reader
-from src.student import Student
 
 houses = ["Ravenclaw", "Slytherin", "Gryffindor", "Hufflepuff"]
 features = [
