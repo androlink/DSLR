@@ -49,7 +49,6 @@ class Visuliazer():
       self.ax.set_yticks([])
     if title is not None: self.ax.set_title(title)
   
-  
   def show(self):
     self.fig.legend()
     self.fig.set_size_inches(20, 20)

@@ -1,7 +1,6 @@
-import sys
 import pandas
 
-from src.reader import Reader
+from src.features_enum import Features
 
 import src.dslr_math as dslr_math
 
@@ -26,58 +25,43 @@ class CommandLine:
       if argument.include:
         self.include = argument.include
 
-
+def applyRound(value) -> float:
+  if app.roundUp != None:
+    return round(value, app.roundUp)
+  return value
+  
 if __name__ == '__main__':
   app = CommandLine()
   
   if not app.filePath.endswith(".csv") :
     print("describe.py only takes one .csv file as argument")
     exit()
-    
-  def applyRound(value) -> float:
-    if app.roundUp != None:
-      return round(value, app.roundUp)
-    return value
   
-  reader = Reader(app.filePath)
-  
-  fields = [
-    'arithmancy', 
-    'astronomy',  
-    'herbology',  
-    'defense',  
-    'divination', 
-    'muggleStudies',  
-    'ancientRunes', 
-    'historyOfMagic', 
-    'transfiguration',  
-    'potions',  
-    'careOfMagicalCreatures', 
-    'charms', 
-    'flying', 
-  ]
+  dataFrame: pandas.DataFrame = pandas.read_csv(app.filePath)
   
   for value in app.include:
-    if value not in fields:
+    if value not in Features:
       app.include.remove(value)
   if app.include == []:
-    app.include = fields
+    app.include = [f for f in Features]
   
   data = {}
   
-  for field in app.include:
-    feature = reader.listOfProperty(field)
+  for feature in app.include:
+    if feature == Features.hogwartsHouse: continue
+    countNone = dataFrame.get(feature).isna().tolist().count(True)
+    values = dataFrame.get(feature).dropna().tolist()
     l = []
-    l.append(len(feature))
-    l.append(applyRound(dslr_math.dslr_mean(feature)))
-    l.append(applyRound(dslr_math.dslr_stddev(feature)))
-    l.append(applyRound(dslr_math.dslr_min(feature)))
-    l.append(applyRound(dslr_math.dslr_quartile(feature, .25)))
-    l.append(applyRound(dslr_math.dslr_quartile(feature, .50)))
-    l.append(applyRound(dslr_math.dslr_quartile(feature, .75)))
-    l.append(applyRound(dslr_math.dslr_max(feature)))
-    l.append(applyRound(dslr_math.dslr_count_none(feature)))
-    data[field] = l
+    l.append(len(values))
+    l.append(applyRound(dslr_math.dslr_mean(values)))
+    l.append(applyRound(dslr_math.dslr_stddev(values)))
+    l.append(applyRound(dslr_math.dslr_min(values)))
+    l.append(applyRound(dslr_math.dslr_quartile(values, .25)))
+    l.append(applyRound(dslr_math.dslr_quartile(values, .50)))
+    l.append(applyRound(dslr_math.dslr_quartile(values, .75)))
+    l.append(applyRound(dslr_math.dslr_max(values)))
+    l.append(countNone)
+    data[feature] = l
 
   df = pandas.DataFrame(data=data, index=["count", "mean", "std", "min", "25%", "50%", "75%", "max", "count_none"])
   print(df)
