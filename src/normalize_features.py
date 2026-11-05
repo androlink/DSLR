@@ -2,7 +2,7 @@ from pandas import DataFrame
 from src.dslr_math import dslr_normalize
 from src.features_enum import Features
 
-def normalizeDataFrame(df: DataFrame):
+def normalizeDataFrame(df: DataFrame) -> DataFrame:
   fields: list[str] = [f.value for f in Features]
   fields.append('Best Hand')
   fields.remove('Hogwarts House')
