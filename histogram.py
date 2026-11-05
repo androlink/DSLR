@@ -5,42 +5,21 @@ import pandas
 import sys
 
 import matplotlib.pyplot as plt
-
-
-houses = ["Ravenclaw", "Slytherin", "Gryffindor", "Hufflepuff"]
-features = [
-		"Arithmancy",
-		"Astronomy",
-		"Herbology",
-		"Defense Against the Dark Arts",
-		"Divination",
-		"Muggle Studies",
-		"Ancient Runes",
-		"History of Magic",
-		"Transfiguration",
-		"Potions",
-		"Care of Magical Creatures",
-		"Charms",
-		"Flying"]
+from src.features_enum import Features
+from src.visualizer_cli import VisualizerCli
+from src.visualizer import Visuliazer
 
 def dslr_histogram(students_df: pandas.DataFrame):
-	figure = plt.figure(1, )
-	columns = 4
-	rows = (len(features) / columns).__ceil__()
-	for i, feature in enumerate(features):
-		figure.add_subplot(rows, columns, i + 1)
-		seaborn.histplot(data=students_df,
-			x = feature,
-			hue = "Hogwarts House"
-		)
-	plt.show()
-
-
-
+  visualizer = Visuliazer(students_df)
+  for i, feature in enumerate(Features):
+    visualizer.addHistogram(i, x=feature)
+  visualizer.show()
 
 if __name__ == "__main__":
-	if len(sys.argv) != 2 or not sys.argv[1].endswith(".csv") :
-		print("Program only takes one .csv file")
-		sys.exit()
-	df = pandas.read_csv(sys.argv[1])
-	dslr_histogram(df)
+  cli = VisualizerCli()
+  
+  if not cli.filePath.endswith(".csv") :
+    print("Program only takes one .csv file as argument")
+    sys.exit()
+  df = pandas.read_csv(sys.argv[1])
+  dslr_histogram(df)
