@@ -10,7 +10,6 @@ def dslr_min_2(v1: float, v2: float):
 
 
 def dslr_min(l: list[float]) -> float:
-	l = [item for item in l if item != None]
 	if len(l) < 1:
 		raise DslrExeption("can't min empty list")
 	m = l[0]
@@ -23,7 +22,6 @@ def dslr_max_2(v1: float, v2: float):
 
 
 def dslr_max(l: list[float]) -> float:
-	l = [item for item in l if item != None]
 	if len(l) < 1:
 		raise DslrExeption("can't max empty list")
 	m = l[0]
@@ -32,14 +30,12 @@ def dslr_max(l: list[float]) -> float:
 	return m
 
 def dslr_mean(l: list[float]) -> float:
-	l = [item for item in l if item != None]
 	if len(l) < 1:
 		raise DslrExeption("can't mean empty list")
 	l_sum = sum(l)
 	return l_sum / len(l)
 
 def dslr_count(l: list[float], value: float) -> int:
-	l = [item for item in l if item != None]
 	count = 0
 	for v in l:
 		if v == value:
@@ -47,12 +43,10 @@ def dslr_count(l: list[float], value: float) -> int:
 	return count
 
 def dslr_quartile(l: list, percent: float)-> float:
-	l = [item for item in l if item != None]
 	l.sort();
 	return l[round(len(l) * percent)]
 
 def dslr_stddev(l:list[float]) -> float:
-	l = [item for item in l if item != None]
 	mean = dslr_mean(l)
 	s = sum([(x - mean) ** 2 for x in l])
 	e = (1 / (len(l) - 1)) * s
