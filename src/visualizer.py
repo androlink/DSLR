@@ -13,11 +13,19 @@ class Visuliazer():
   fig: Figure
   ax: Axes
   
-  markerSize = 4.2
+  markerSize = 15
   fontSize = 7.5 
   
   hue: str
   showTicks: bool
+  
+  palette = {
+  'Gryffindor' : 'Orange',
+  'Slytherin' : 'Green',
+  'Ravenclaw' : 'Red',
+  'Hufflepuff' : 'Blue',
+  }
+  
   def __init__(self, data: DataFrame, dropedColumns = ['Last Name' ,'First Name', 'Best Hand', 'Birthday'], hue="Hogwarts House", showTicks = True):
     self.data = data
     self.data.drop(columns=dropedColumns)
@@ -31,13 +39,18 @@ class Visuliazer():
   
   def addScatterPlot(self, index: int, x: str, y: str, xLabel: str | None = None, yLabel: str | None = None, title: str | None = None) -> plt.Axes:
     self.fig.add_subplot(self.rows, self.columns, index + 1)
-    self.ax = scatterplot(self.data, x=x, y=y, hue=self.hue, size=self.markerSize, legend=False)
+    self.ax = scatterplot(self.data, x=x, y=y, hue=self.hue, s=self.markerSize, palette=self.palette)
     self.updateAxesOption(xLabel, yLabel, title)
+    self.ax.legend().set_visible(False)
+    
+    # Get legend of current plot and set it as the figure legend
+    handlers, labels = self.ax.get_legend_handles_labels()
+    self.fig.legend(handlers, labels, loc='lower right')
     return self.ax
     
   def addHistogram(self, index: int, x: str, bins: int | str = 'auto', xLabel: str | None = None, yLabel: str | None = None, title: str | None = None) -> plt.Axes:
     self.fig.add_subplot(self.rows, self.columns, index + 1)
-    self.ax = histplot(self.data, x=x, bins=bins, hue=self.hue, legend=False)
+    self.ax = histplot(self.data, x=x, bins=bins, hue=self.hue, legend=False, palette=self.palette)
     self.updateAxesOption(xLabel, yLabel, title)
     return self.ax
   
@@ -50,6 +63,5 @@ class Visuliazer():
     if title is not None: self.ax.set_title(title)
   
   def show(self):
-    self.fig.legend()
     self.fig.set_size_inches(20, 20)
     plt.show()
