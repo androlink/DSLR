@@ -42,6 +42,8 @@ class Visuliazer():
     self.ax = scatterplot(self.data, x=x, y=y, hue=self.hue, s=self.markerSize, palette=self.palette)
     self.updateAxesOption(xLabel, yLabel, title)
     self.ax.legend().set_visible(False)
+    
+    # Get legend of current plot and set it as the figure legend
     handlers, labels = self.ax.get_legend_handles_labels()
     self.fig.legend(handlers, labels, loc='lower right')
     return self.ax
