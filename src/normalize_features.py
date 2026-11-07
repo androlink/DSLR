@@ -1,3 +1,4 @@
+import numpy
 from pandas import DataFrame
 from src.dslr_math import dslr_normalize
 from src.features_enum import Features
@@ -13,3 +14,17 @@ def normalizeDataFrame(df: DataFrame) -> DataFrame:
     l = df.get(field).fillna(0).tolist()
     data[field] = dslr_normalize(l)
   return DataFrame(data)
+
+def min_max_scale(df: DataFrame):
+    return (df-df.min())/(df.max()-df.min())
+
+def std_scale(df: DataFrame):
+    return (df-df.mean())/df.std()
+
+def prepare_dataframe(df: DataFrame) -> DataFrame:
+
+    df = df.drop(columns=['Index', 'Last Name' ,'First Name', 'Birthday', 'Hogwarts House'])
+    df = df.replace('Left', -1).replace('Right', 1)
+    df = df.fillna(0)
+
+    return df
